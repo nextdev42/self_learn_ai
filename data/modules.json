@@ -1,0 +1,20 @@
+[
+  {
+    "id": "m101",
+    "title": "Intro to AI (Swahili)",
+    "duration_minutes": 10,
+    "level": "beginner"
+  },
+  {
+    "id": "m102",
+    "title": "Python Basics",
+    "duration_minutes": 15,
+    "level": "beginner"
+  },
+  {
+    "id": "m201",
+    "title": "Build a Chatbot",
+    "duration_minutes": 25,
+    "level": "intermediate"
+  }
+]
