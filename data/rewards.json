@@ -1,0 +1,32 @@
+[
+  {
+    "userId": "user123",
+    "id": "r001",
+    "title": "First Module Completed",
+    "criteria": {
+      "modulesCompleted": 1
+    },
+    "points": 10,
+    "earnedAt": "2025-10-01T14:00:11.762Z"
+  },
+  {
+    "userId": "user123",
+    "id": "r002",
+    "title": "Complete 3 Modules",
+    "criteria": {
+      "modulesCompleted": 3
+    },
+    "points": 30,
+    "earnedAt": "2025-10-01T14:00:11.762Z"
+  },
+  {
+    "userId": "user123",
+    "id": "r003",
+    "title": "Top Scorer in a Module",
+    "criteria": {
+      "scoreAbove": 90
+    },
+    "points": 20,
+    "earnedAt": "2025-10-01T14:00:11.762Z"
+  }
+]
