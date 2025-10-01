@@ -1,157 +1,135 @@
-## 🚀 Getting Started
+# Self Learn AI — Feature: OpenAI
+Personalization
 
-[](https://github.com/nextdev42/self_learn_ai/blob/main/README.md#-getting-started)
+## Overview
+This branch adds an AI-powered learning journey generator that refines rule-based recommendations and creates structured module sequences tailored to each learner using OpenAI.
 
-### 1. Install dependencies
+---
 
-[](https://github.com/nextdev42/self_learn_ai/blob/main/README.md#1-install-dependencies)
+## Installation
 
-```
+```bash
 npm install
+npm install openai dotenv axios
+```
+### Create a `.env` file:
+
+```ini
+OPENAI_API_KEY=sk-<your-key>
+USE_OPENAI=true
+OPENAI_MODEL=gpt-4o-mini
+PORT=4000
+
 ```
 
-### 2. Start the server
+### Running the Server
 
-[](https://github.com/nextdev42/self_learn_ai/blob/main/README.md#2-start-the-server)
-
+```bash
+npm start
 ```
-node server.js
-```
+Server will run on the port specified in `.env` (default `4000`).
 
-Server runs on <http://localhost:4000>
+## API Endpoints & Tests
 
-## 📌 API Tests with curl + Expected Output
+### 1. Questionnaire Submission
 
-
-### 1. Submit a Questionnaire
 ```bash
 
 
 curl -X POST http://localhost:4000/api/questionnaire \
   -H "Content-Type: application/json" \
-  -d '{
-    "userId": "user123",
-    "answers": {
-      "goal": "learn basics",
-      "level": "beginner"
-    }
-  }'
-```
+  -d '{"userId":"user123","answers":{"goal":"learn basics","level":"beginner"}}'
 
-### Expected Response:
+```
+### Sample Response:
 
 ```json
 {
   "success": true,
   "response": {
-    "id": "uuid-generated",
+    "id": "99fd51f2-702b-4088-91fe-1a5034ac96d4",
     "userId": "user123",
-    "answers": {
-      "goal": "learn basics",
-      "level": "beginner"
-    }
+    "answers": { "goal": "learn basics", "level": "beginner" }
   }
 }
 
 ```
-
-### 2\. Generate a Personalized Journey (AI-powered)
+### 2\. Generate Learning Journey
 
 ```json
-curl -X POST http://localhost:4000/api/journey \
-  -H "Content-Type: application/json" \
-  -d '{
-    "userId": "user123",
-    "level": "beginner",
-    "questionnaireAnswers": {
-      "goal": "learn basics"
-    }
-  }'
-
-```
-### Expected Response (example):
-```json
-
-
 {
   "success": true,
   "journey": {
-    "id": "uuid-generated",
+    "id": "833edd42-cd35-40ec-861e-a98006e7b0b7",
     "userId": "user123",
     "modules": [
-      {
-        "id": "m101",
-        "title": "Intro to AI (Swahili)",
-        "duration_minutes": 10,
-        "learning_objectives": [
-          "Understand the basics of artificial intelligence",
-          "Learn key terms and concepts in AI"
-        ],
-        "difficulty": "beginner"
-      },
-      {
-        "id": "m102",
-        "title": "Python Basics",
-        "duration_minutes": 15,
-        "learning_objectives": [
-          "Learn the fundamentals of Python programming",
-          "Write simple Python scripts"
-        ],
-        "difficulty": "beginner"
-      },
-      {
-        "id": "x_001",
-        "title": "Introduction to Programming Concepts",
-        "duration_minutes": 20,
-        "learning_objectives": [
-          "Understand basic programming concepts such as variables, loops, and functions",
-          "Develop problem-solving skills through programming"
-        ],
-        "difficulty": "beginner"
-      }
+      { "id": "m101", "title": "Intro to AI (Swahili)", "duration_minutes": 10, "level": "beginner" },
+      { "id": "m102", "title": "Python Basics", "duration_minutes": 15, "level": "beginner" },
+      { "id": "x_001", "title": "Introduction to Programming Concepts", "duration_minutes": 20, "difficulty": "beginner" },
+      { "id": "x_002", "title": "Getting Started with Data Science", "duration_minutes": 30, "difficulty": "beginner" }
     ],
     "currentIndex": 0,
     "createdAt": "2025-10-01T12:25:08.425Z"
   }
 }
+
 ```
 
-### 3\. Update Module Progress
+### 3\. Log Module Progress
 
-```bash
+```json
 curl -X POST http://localhost:4000/api/progress \
   -H "Content-Type: application/json" \
-  -d '{
-    "userId": "user123",
-    "moduleId": "m101",
-    "status": "completed",
-    "score": 80
-  }'
+  -d '{"userId":"user123","moduleId":"m101","status":"completed","score":80}'
 
 ```
 
-### Expected Response:
+### Sample Response:
 
 ```json
 {
   "success": true,
   "entry": {
-    "userId": "user123",
-    "moduleId": "m101",
-    "status": "completed",
-    "score": 80,
-    "updatedAt": "2025-10-01T12:22:11.701Z"
-  }
+    "userId":"user123",
+    "moduleId":"m101",
+    "status":"completed",
+    "score":80,
+    "updatedAt":"2025-10-01T14:10:39.682Z"
+  },
+  "earnedRewards":[
+    {"id":"r001","title":"First Module Completed","criteria":{"modulesCompleted":1},"points":10,"userId":"user123","earnedAt":"2025-10-01T14:10:39.683Z"}
+  ]
 }
 
 ```
 
-### ✅ Notes
+### 4\. Fetch User Rewards
 
-* Ensure your `.env` file contains a valid `OPENAI_API_KEY`, `USE_OPENAI=true`, and `OPENAI_MODEL` (e.g., `gpt-4o-mini`).
+```bash
+curl http://localhost:4000/api/rewards/user123
 
-* Run `npm start` before using curl.
+```
 
-* The AI may generate extra modules (`x_001`, `x_002`) in addition to your predefined ones.
+### Sample Response:
+
+```json
+[
+  {"userId":"user123","id":"r001","title":"First Module Completed","criteria":{"modulesCompleted":1},"points":10,"earnedAt":"2025-10-01T14:10:39.683Z"}
+]
+
+```
+
+## Notes
+
+* OpenAI personalization is optional and controlled via `USE_OPENAI` environment variable.
+
+* Ensure your API key is valid in `.env`.
+
+* Rule-based recommendations are used as fallback if OpenAI call fails.
 
 
+* OpenAI personalization is optional and controlled via `USE_OPENAI` environment variable.
+
+* Ensure your API key is valid in `.env`.
+
+* Rule-based recommendations are used as fallback if OpenAI call fails.
